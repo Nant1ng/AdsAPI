@@ -2,6 +2,7 @@
 using AdsAPI.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks.Dataflow;
 
 namespace AdsAPI.Controllers
 {
@@ -65,6 +66,20 @@ namespace AdsAPI.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(adToUpdate);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult<Ad>> DeleteAd(int id)
+        {
+            var deleteAd = await _context.Ads.FindAsync(id);
+
+            if (deleteAd == null)
+                return NotFound($"Ad with id: {id} was not found!");
+
+            _context.Ads.Remove(deleteAd);
+            await _context.SaveChangesAsync();
+            return Ok(deleteAd);
         }
     }
 }
