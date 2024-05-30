@@ -23,5 +23,17 @@ namespace AdsAPI.Controllers
 
             return Ok(ads);
         }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<Ad>> GetOne(int id)
+        {
+            var ad = await _context.Ads.FindAsync(id);
+
+            if (ad == null)
+                return NotFound($"Ad with id: {id} was not found");
+
+            return Ok(ad);
+        }
     }
 }
