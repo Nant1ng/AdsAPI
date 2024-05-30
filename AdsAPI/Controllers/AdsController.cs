@@ -48,5 +48,23 @@ namespace AdsAPI.Controllers
 
             return Ok(ad);
         }
+
+        [HttpPut]
+        public async Task<ActionResult<Ad>> UpdateAd(Ad ad)
+        {
+            var adToUpdate = await _context.Ads.FindAsync(ad.Id);
+
+            if (adToUpdate == null)
+                return NotFound($"Ad with id: {ad.Id} was not found!");
+
+            adToUpdate.Title = ad.Title;
+            adToUpdate.Description = ad.Description;
+            adToUpdate.Author = ad.Author;
+            adToUpdate.PublishedDate = ad.PublishedDate;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(adToUpdate);
+        }
     }
 }
