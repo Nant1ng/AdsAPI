@@ -35,5 +35,18 @@ namespace AdsAPI.Controllers
 
             return Ok(ad);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<Ad>> PostAd(Ad ad)
+        {
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            _context.Ads.Add(ad);
+            await _context.SaveChangesAsync();
+
+            return Ok(ad);
+        }
     }
 }
