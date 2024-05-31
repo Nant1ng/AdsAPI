@@ -16,6 +16,11 @@ namespace AdsAPI.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Retrieves all ads.
+        /// </summary>
+        /// <returns>A list of ads.</returns>
+        /// <response code="200">Returns the list of ads.</response>
         [HttpGet]
         public async Task<ActionResult<List<Ad>>> GetAll()
         {
@@ -24,8 +29,14 @@ namespace AdsAPI.Controllers
             return Ok(ads);
         }
 
-        [HttpGet]
-        [Route("{id}")]
+        /// <summary>
+        /// Retrieves a specific ad by unique id.
+        /// </summary>
+        /// <param name="id">The id of the ad.</param>
+        /// <returns>The ad with the specified id.</returns>
+        /// <response code="200">Returns the ad with the specified id.</response>
+        /// <response code="404">If the ad is not found.</response>
+        [HttpGet("{id}")]
         public async Task<ActionResult<Ad>> GetOne(int id)
         {
             var ad = await _context.Ads.FindAsync(id);
@@ -36,6 +47,13 @@ namespace AdsAPI.Controllers
             return Ok(ad);
         }
 
+        /// <summary>
+        /// Creates a new ad.
+        /// </summary>
+        /// <param name="ad">The ad to create.</param>
+        /// <returns>The created ad.</returns>
+        /// <response code="200">Returns the created ad.</response>
+        /// <response code="400">If the ad is invalid.</response>
         [HttpPost]
         public async Task<ActionResult<Ad>> PostAd(Ad ad)
         {
@@ -49,8 +67,15 @@ namespace AdsAPI.Controllers
             return Ok(ad);
         }
 
-        [HttpPut]
-        [Route("{id}")]
+        /// <summary>
+        /// Updates an ad.
+        /// </summary>
+        /// <param name="id">The id of the ad to update.</param>
+        /// <param name="updatedAd">The updated ad.</param>
+        /// <returns>The updated ad.</returns>
+        /// <response code="200">Returns the updated ad.</response>
+        /// <response code="404">If the ad is not found.</response>
+        [HttpPut("{id}")]
         public async Task<ActionResult<Ad>> UpdateAd(int id, [FromBody] Ad updatedAd)
         {
             var adToUpdate = await _context.Ads.FindAsync(id);
@@ -69,8 +94,14 @@ namespace AdsAPI.Controllers
             return Ok(adToUpdate);
         }
 
-        [HttpDelete]
-        [Route("{id}")]
+        /// <summary>
+        /// Deletes an ad.
+        /// </summary>
+        /// <param name="id">The id of the ad to delete.</param>
+        /// <returns>The deleted ad.</returns>
+        /// <response code="200">Returns the deleted ad.</response>
+        /// <response code="404">If the ad is not found.</response>
+        [HttpDelete("{id}")]
         public async Task<ActionResult<Ad>> DeleteAd(int id)
         {
             var deleteAd = await _context.Ads.FindAsync(id);
