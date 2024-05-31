@@ -1,5 +1,6 @@
 ﻿using AdsAPI.Data;
 using AdsAPI.Data.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,7 +43,7 @@ namespace AdsAPI.Controllers
             var ad = await _context.Ads.FindAsync(id);
 
             if (ad == null)
-                return NotFound($"Ad with id: {id} was not found");
+                return NotFound($"Ad with id: {id} was not found!");
 
             return Ok(ad);
         }
@@ -92,6 +93,28 @@ namespace AdsAPI.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(adToUpdate);
+        }
+
+        /// <summary>
+        /// Applies a JSON patch to an existing ad.
+        /// </summary>
+        /// <param name="id">The id of the ad to update.</param>
+        /// <param name="ad">The JSON patch document containing the changes to apply.</param>
+        /// <returns>The updated ad.</returns>
+        /// <response code="200">Returns the updated ad.</response>
+        /// <response code="404">If the ad is not found.</response>
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<Ad>> PatchAd(int id, JsonPatchDocument ad)
+        {
+            var adToUpdate = await _context.Ads.FindAsync(id);
+
+            if (adToUpdate == null)
+                return NotFound($"Ad with id: {id} was not found!");
+
+            ad.ApplyTo(adToUpdate);
+            await _context.SaveChangesAsync();
+
+            return Ok(ad);
         }
 
         /// <summary>
