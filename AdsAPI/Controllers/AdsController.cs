@@ -2,7 +2,6 @@
 using AdsAPI.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks.Dataflow;
 
 namespace AdsAPI.Controllers
 {
@@ -51,17 +50,19 @@ namespace AdsAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Ad>> UpdateAd(Ad ad)
+        [Route("{id}")]
+        public async Task<ActionResult<Ad>> UpdateAd(int id, [FromBody] Ad updatedAd)
         {
-            var adToUpdate = await _context.Ads.FindAsync(ad.Id);
+            var adToUpdate = await _context.Ads.FindAsync(id);
+            DateTime date = DateTime.Now;
 
             if (adToUpdate == null)
-                return NotFound($"Ad with id: {ad.Id} was not found!");
+                return NotFound($"Ad with id: {id} was not found!");
 
-            adToUpdate.Title = ad.Title;
-            adToUpdate.Description = ad.Description;
-            adToUpdate.Author = ad.Author;
-            adToUpdate.PublishedDate = ad.PublishedDate;
+            adToUpdate.Title = adToUpdate.Title;
+            adToUpdate.Description = adToUpdate.Description;
+            adToUpdate.Author = adToUpdate.Author;
+            adToUpdate.PublishedDate = adToUpdate.PublishedDate;
 
             await _context.SaveChangesAsync();
 
