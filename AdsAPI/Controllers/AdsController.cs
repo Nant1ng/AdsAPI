@@ -1,5 +1,7 @@
 ﻿using AdsAPI.Data;
 using AdsAPI.Data.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +10,7 @@ namespace AdsAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [EnableCors("AllowAll")]
     public class AdsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,6 +26,7 @@ namespace AdsAPI.Controllers
         /// <returns>A list of ads.</returns>
         /// <response code="200">Returns the list of ads.</response>
         [HttpGet]
+        [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<List<Ad>>> GetAll()
         {
             var ads = await _context.Ads.ToListAsync();
@@ -38,6 +42,7 @@ namespace AdsAPI.Controllers
         /// <response code="200">Returns the ad with the specified id.</response>
         /// <response code="404">If the ad is not found.</response>
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<Ad>> GetOne(int id)
         {
             var ad = await _context.Ads.FindAsync(id);
@@ -55,7 +60,9 @@ namespace AdsAPI.Controllers
         /// <returns>The created ad.</returns>
         /// <response code="200">Returns the created ad.</response>
         /// <response code="400">If the ad is invalid.</response>
+        /// <response code="403">A user is not authorized to perform this action.</response>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Ad>> PostAd(Ad ad)
         {
 
@@ -75,8 +82,10 @@ namespace AdsAPI.Controllers
         /// <param name="updatedAd">The updated ad.</param>
         /// <returns>The updated ad.</returns>
         /// <response code="200">Returns the updated ad.</response>
+        /// <response code="403">A user is not authorized to perform this action.</response>
         /// <response code="404">If the ad is not found.</response>
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Ad>> UpdateAd(int id, [FromBody] Ad updatedAd)
         {
             var adToUpdate = await _context.Ads.FindAsync(id);
@@ -102,8 +111,10 @@ namespace AdsAPI.Controllers
         /// <param name="ad">The JSON patch document containing the changes to apply.</param>
         /// <returns>The updated ad.</returns>
         /// <response code="200">Returns the updated ad.</response>
+        /// <response code="403">A user is not authorized to perform this action.</response>
         /// <response code="404">If the ad is not found.</response>
         [HttpPatch("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Ad>> PatchAd(int id, JsonPatchDocument ad)
         {
             var adToUpdate = await _context.Ads.FindAsync(id);
@@ -123,8 +134,10 @@ namespace AdsAPI.Controllers
         /// <param name="id">The id of the ad to delete.</param>
         /// <returns>The deleted ad.</returns>
         /// <response code="200">Returns the deleted ad.</response>
+        /// <response code="403">A user is not authorized to perform this action.</response>
         /// <response code="404">If the ad is not found.</response>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Ad>> DeleteAd(int id)
         {
             var deleteAd = await _context.Ads.FindAsync(id);
