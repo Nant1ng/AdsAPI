@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdsAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240530211847_Initial migration")]
+    [Migration("20240607200845_Initial migration")]
     partial class Initialmigration
     {
         /// <inheritdoc />
@@ -41,8 +41,8 @@ namespace AdsAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("PublishedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("PublishedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()

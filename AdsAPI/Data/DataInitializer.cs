@@ -28,7 +28,7 @@ namespace AdsAPI.Data
                     Title = "Anställningsbar",
                     Author = "Kalk Rikkardson",
                     Description = "Vi på Systementor försöker froma alla våra elever så att de blir anställningsbara.",
-                    PublishedDate = DateOnly.FromDateTime(DateTime.Now)
+                    PublishedDate = DateTime.Now
                 });
             }
         }
